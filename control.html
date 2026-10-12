@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Fútbol Americano</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            padding: 15px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #ffcc00;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .card {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #3498db;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .teams-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .team-control-box {
+            background-color: #252525;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .team-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .current-score {
+            font-size: 32px;
+            font-family: 'Arial Black', sans-serif;
+            margin-bottom: 8px;
+            color: #ffcc00;
+        }
+        .score-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 5px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:active {
+            background-color: #555;
+        }
+        .btn-plus { background-color: #27ae60; }
+        .btn-plus:active { background-color: #219653; }
+        .btn-reset { background-color: #c0392b; grid-column: span 3; font-size: 12px; padding: 6px; }
+        .btn-reset:active { background-color: #962d22; }
+
+        .control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #2c3e50;
+            color: white;
+            border: 1px solid #4f5d73;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+        }
+        .switch-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #2c3e50;
+            padding: 12px 15px;
+            border-radius: 8px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 30px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #f1c40f;
+        }
+        input:checked + .slider:before {
+            transform: translateX(30px);
+            background-color: #000;
+        }
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 5px;
+        }
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-action {
+            background-color: #2980b9;
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Panel de Control - Americano</h1>
+
+    <div class="container">
+        
+        <!-- CONTROL DE CASTIGO (INTERRUPTOR) -->
+        <div class="card">
+            <div class="card-title">Bandera de Castigo</div>
+            <div class="switch-container">
+                <span>Mostrar Animación "CASTIGO"</span>
+                <label class="switch">
+                    <input type="checkbox" id="penaltySwitch" onchange="togglePenalty(this)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- CONTROL DE CUARTO Y POSESIÓN -->
+        <div class="card">
+            <div class="card-title">Configuración del Partido</div>
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 12px; color: #aaa; display:block; margin-bottom:4px;">CUARTO DE JUEGO</label>
+                <select id="quarterSelect" onchange="updateQuarter(this)">
+                    <option value="1ER. CUARTO">1ER. CUARTO</option>
+                    <option value="2DO. CUARTO">2DO. CUARTO</option>
+                    <option value="3ER. CUARTO">3ER. CUARTO</option>
+                    <option value="4TO. CUARTO">4TO. CUARTO</option>
+                </select>
+            </div>
+            <div>
+                <label style="font-size: 12px; color: #aaa; display:block; margin-bottom:4px;">POSESIÓN DEL BALÓN</label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="possession" value="local" onclick="setPossession('local')"> Local
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="possession" value="none" onclick="setPossession('none')"> Ninguno
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="possession" value="visitor" onclick="setPossession('visitor')"> Visitante
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTROL DE MARCADORES Y TIEMPOS FUERA -->
+        <div class="teams-grid">
+            
+            <!-- EQUIPO LOCAL -->
+            <div class="team-control-box">
+                <input type="text" id="inputNameLocal" value="MEXICAHS" onchange="updateTeamName('Local', this.value)" style="margin-bottom:8px; text-align:center; font-weight:bold;">
+                <div class="current-score" id="ctrlScoreLocal">0</div>
+                <div class="score-buttons">
+                    <button class="btn-plus" onclick="addScore('Local', 1)">+1</button>
+                    <button class="btn-plus" onclick="addScore('Local', 2)">+2</button>
+                    <button class="btn-plus" onclick="addScore('Local', 3)">+3</button>
+                    <button class="btn-plus" onclick="addScore('Local', 6)" style="grid-column: span 3;">+6 Touchdown</button>
+                    <button class="btn-reset" onclick="resetScore('Local')">Reset 0</button>
+                </div>
+                <div style="width: 100%; margin-top: 10px; border-top: 1px solid #444; padding-top: 8px;">
+                    <div style="font-size: 12px; color: #aaa; text-align:center; margin-bottom:4px;">Tiempos Fuera: <span id="txtTimeoutsLocal">3</span></div>
+                    <div style="display: flex; gap: 5px;">
+                        <button class="btn-action" onclick="modifyTimeout('Local', -1)" style="background-color: #d35400;">Usar (-1)</button>
+                        <button class="btn-action" onclick="modifyTimeout('Local', 3)" style="background-color: #27ae60;">Reset (3)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EQUIPO VISITANTE -->
+            <div class="team-control-box">
+                <input type="text" id="inputNameVisitor" value="BULLDOGS" onchange="updateTeamName('Visitor', this.value)" style="margin-bottom:8px; text-align:center; font-weight:bold;">
+                <div class="current-score" id="ctrlScoreVisitor">0</div>
+                <div class="score-buttons">
+                    <button class="btn-plus" onclick="addScore('Visitor', 1)">+1</button>
+                    <button class="btn-plus" onclick="addScore('Visitor', 2)">+2</button>
+                    <button class="btn-plus" onclick="addScore('Visitor', 3)">+3</button>
+                    <button class="btn-plus" onclick="addScore('Visitor', 6)" style="grid-column: span 3;">+6 Touchdown</button>
+                    <button class="btn-reset" onclick="resetScore('Visitor')">Reset 0</button>
+                </div>
+                <div style="width: 100%; margin-top: 10px; border-top: 1px solid #444; padding-top: 8px;">
+                    <div style="font-size: 12px; color: #aaa; text-align:center; margin-bottom:4px;">Tiempos Fuera: <span id="txtTimeoutsVisitor">3</span></div>
+                    <div style="display: flex; gap: 5px;">
+                        <button class="btn-action" onclick="modifyTimeout('Visitor', -1)" style="background-color: #d35400;">Usar (-1)</button>
+                        <button class="btn-action" onclick="modifyTimeout('Visitor', 3)" style="background-color: #27ae60;">Reset (3)</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FIREBASE SDK & LÓGICA DE CONTROL -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, update, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // CONFIGURA TU FIREBASE AQUÍ (Debe ser idéntico al del overlay)
+        const firebaseConfig = {
+            apiKey: "AIzaSyB9ng9R66re2Kh8ji8HxitvF3OhcEHxGi4",
+            authDomain: "ofamo-mexicahs.firebaseapp.com",
+            projectId: "ofamo-mexicahs",
+            storageBucket: "ofamo-mexicahs.firebasestorage.app",
+            messagingSenderId: "95998679046",
+            appId: "1:95998679046:web:8cdeb43879a592f8944b87"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const matchRef = ref(db, 'marcadorPartido');
+
+        // Variables locales de estado para evitar sobreescrituras bruscas
+        let state = {
+            scoreLocal: 0,
+            scoreVisitor: 0,
+            nameLocal: "MEXICAHS",
+            nameVisitor: "BULLDOGS",
+            quarter: "1ER. CUARTO",
+            timeoutsLocal: 3,
+            timeoutsVisitor: 3,
+            possession: "none",
+            penalty: false
+        };
+
+        // Sincronizar estado actual desde Firebase hacia el panel
+        onValue(matchRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                state = { ...state, ...data };
+                document.getElementById('ctrlScoreLocal').innerText = state.scoreLocal;
+                document.getElementById('ctrlScoreVisitor').innerText = state.scoreVisitor;
+                document.getElementById('quarterSelect').value = state.quarter;
+                document.getElementById('txtTimeoutsLocal').innerText = state.timeoutsLocal;
+                document.getElementById('txtTimeoutsVisitor').innerText = state.timeoutsVisitor;
+                document.getElementById('penaltySwitch').checked = state.penalty;
+                
+                // Marcar radio button de posesión activo
+                const radios = document.getElementsByName('possession');
+                radios.forEach(r => {
+                    if (r.value === state.possession) r.checked = true;
+                });
+            }
+        });
+
+        // Funciones de control globales expuestas a los botones
+        window.addScore = function(team, points) {
+            if (team === 'Local') {
+                state.scoreLocal = Math.max(0, state.scoreLocal + points);
+            } else {
+                state.scoreVisitor = Math.max(0, state.scoreVisitor + points);
+            }
+            syncFirebase();
+        }
+
+        window.resetScore = function(team) {
+            if (team === 'Local') state.scoreLocal = 0;
+            else state.scoreVisitor = 0;
+            syncFirebase();
+        }
+
+        window.updateTeamName = function(team, val) {
+            if (team === 'Local') state.nameLocal = val;
+            else state.nameVisitor = val;
+            syncFirebase();
+        }
+
+        window.updateQuarter = function(selectObj) {
+            state.quarter = selectObj.value;
+            syncFirebase();
+        }
+
+        window.setPossession = function(pos) {
+            state.possession = pos;
+            syncFirebase();
+        }
+
+        window.togglePenalty = function(checkbox) {
+            state.penalty = checkbox.checked;
+            syncFirebase();
+        }
+
+        window.modifyTimeout = function(team, val) {
+            let key = team === 'Local' ? 'timeoutsLocal' : 'timeoutsVisitor';
+            if (val === 3) {
+                state[key] = 3;
+            } else {
+                state[key] = Math.max(0, state[key] + val);
+            }
+            syncFirebase();
+        }
+
+        function syncFirebase() {
+            update(matchRef, state);
+        }
+    </script>
+</body>
+</html>
