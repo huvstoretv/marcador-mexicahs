@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Control - Fútbol Americano</title>
+    <title>X ZONE NETWORK</title>
     <style>
         * {
             box-sizing: border-box;
@@ -20,7 +20,7 @@
             text-align: center;
             font-size: 22px;
             margin-bottom: 15px;
-            color: #ffcc00;
+            color: #ff7300;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -32,17 +32,17 @@
             gap: 15px;
         }
         .card {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
+            background-color: #545454;
+            border: 1px solid #70432e;
             border-radius: 10px;
-            padding: 15px;
+            padding: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .card-title {
             font-size: 16px;
             font-weight: bold;
             margin-bottom: 10px;
-            color: #3498db;
+            color: #090909;
             text-transform: uppercase;
             display: flex;
             justify-content: space-between;
@@ -55,7 +55,7 @@
         }
         .team-control-box {
             background-color: #252525;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
             border: 1px solid #444;
             display: flex;
@@ -72,7 +72,7 @@
             font-size: 32px;
             font-family: 'Arial Black', sans-serif;
             margin-bottom: 8px;
-            color: #ffcc00;
+            color: #ff8000;
         }
         .score-buttons {
             display: grid;
@@ -95,8 +95,8 @@
         button:active {
             background-color: #555;
         }
-        .btn-plus { background-color: #27ae60; }
-        .btn-plus:active { background-color: #219653; }
+        .btn-plus { background-color: #262626; }
+        .btn-plus:active { background-color: #262626; }
         .btn-reset { background-color: #c0392b; grid-column: span 3; font-size: 12px; padding: 6px; }
         .btn-reset:active { background-color: #962d22; }
 
@@ -185,15 +185,15 @@
 </head>
 <body>
 
-    <h1>Panel de Control - Americano</h1>
+    <h1>XZONE NETWORK</h1>
 
     <div class="container">
         
         <!-- CONTROL DE CASTIGO (INTERRUPTOR) -->
         <div class="card">
-            <div class="card-title">Bandera de Castigo</div>
+            <div class="card-title">PAÑUELO</div>
             <div class="switch-container">
-                <span>Mostrar Animación "CASTIGO"</span>
+                <span>CASTIGO</span>
                 <label class="switch">
                     <input type="checkbox" id="penaltySwitch" onchange="togglePenalty(this)">
                     <span class="slider"></span>
@@ -211,6 +211,7 @@
                     <option value="2DO. CUARTO">2DO. CUARTO</option>
                     <option value="3ER. CUARTO">3ER. CUARTO</option>
                     <option value="4TO. CUARTO">4TO. CUARTO</option>
+                    <option value="SERIES EXTRAS">SERIES EXTRAS</option>
                 </select>
             </div>
             <div>
@@ -247,7 +248,7 @@
                     <div style="font-size: 12px; color: #aaa; text-align:center; margin-bottom:4px;">Tiempos Fuera: <span id="txtTimeoutsLocal">3</span></div>
                     <div style="display: flex; gap: 5px;">
                         <button class="btn-action" onclick="modifyTimeout('Local', -1)" style="background-color: #d35400;">Usar (-1)</button>
-                        <button class="btn-action" onclick="modifyTimeout('Local', 3)" style="background-color: #27ae60;">Reset (3)</button>
+                        <button class="btn-action" onclick="modifyTimeout('Local', 3)" style="background-color: #6c3808;">Reset (3)</button>
                     </div>
                 </div>
             </div>
@@ -267,7 +268,7 @@
                     <div style="font-size: 12px; color: #aaa; text-align:center; margin-bottom:4px;">Tiempos Fuera: <span id="txtTimeoutsVisitor">3</span></div>
                     <div style="display: flex; gap: 5px;">
                         <button class="btn-action" onclick="modifyTimeout('Visitor', -1)" style="background-color: #d35400;">Usar (-1)</button>
-                        <button class="btn-action" onclick="modifyTimeout('Visitor', 3)" style="background-color: #27ae60;">Reset (3)</button>
+                        <button class="btn-action" onclick="modifyTimeout('Visitor', 3)" style="background-color: #6c3808;">Reset (3)</button>
                     </div>
                 </div>
             </div>
